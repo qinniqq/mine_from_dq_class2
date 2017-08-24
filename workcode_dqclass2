@@ -1,0 +1,80 @@
+import csv
+import datetime
+
+f = open("guns.csv","r")
+csvreader = csv.reader(f)
+data = list(csvreader)
+#remove header
+data = data[1:]
+
+#count total number in one year
+years = []
+for row in data:
+    years.append(row[1])
+year_counts = {}
+for each_year in years:
+    if each_year in year_counts:
+        year_counts[each_year] += 1
+    else:
+        year_counts[each_year] = 1
+#print (year_counts)
+
+# task 4:
+dates = [datetime.datetime(year=int(row[1]), month=int(row[2]), day=1) for row in data]
+dates[:5]
+
+date_counts = {}
+
+for date in dates:
+    if date not in date_counts:
+        date_counts[date] = 0
+    date_counts[date] += 1
+
+date_counts
+
+# task 5:
+sex_counts = {}
+for row in data:
+    if row[5] not in data:
+        sex_counts[row[5]] = 0
+    else:
+        sex_counts[row[5]] += 1
+print(sex_counts)
+
+race_counts = {}
+for row in data:
+    race = row[7]
+    if race not in data:
+        race_counts[race] = 0
+    else:
+        race_counts[race] += 1
+print(race_counts)
+
+#task 6:
+f6 = open("census.csv","r")
+csvreader = csv.reader(f6)
+census = list(csvreader)
+
+print (census)
+
+#task 7*:
+mapping = {"Asian/Pacific Islander":(15159516+674625), "Black":40250635, "Native American/Native Alaskan":3739506, "Hispanic":44618105,"White":197318956}
+race_per_hundredk = {}
+for race,value in race_counts.items():
+    race_per_hundredk[race] = (value/mapping[race]) * 100000
+print(race_per_hundredk)
+
+#task 8:
+intents = [row[3] for row in data]
+races = [row[8] for row in data]
+
+homicide_race_counts = {}
+for i, race in enumerate(races):
+    if race not in homicide_race_counts:
+        himicide_race_counts[race] = 0
+    if intents[i] == "Homicide":
+        homicide_race_counts += 1
+
+h_race_hundredk = {}             
+for race,value in homicide_race_counts.items():
+    h_race_hundredk[race] = (value/mapping[race]) * 100000
